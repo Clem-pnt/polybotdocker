@@ -15,69 +15,49 @@ Un système de gestion multi-bots Discord modulaire et extensible. Lancez plusie
 
 ### Prérequis
 - Node.js 16+ 
-- npm ou yarn
+- npm
 - Git
 
 ### Installation
 
 ```powershell
 # 1. Cloner le projet
-git clone https://github.com/YOUR_USERNAME/PolyBotDocker.git
-cd PolyBotDocker
+git clone https://github.com/Clem-pnt/polybotdocker.git
+cd polybotdocker
 
-# 2. Copier et configurer le fichier .env
-Copy-Item .env.example .env
+# 2. Configurer le fichier .env
 # Éditez .env et ajoutez vos tokens Discord
 
 # 3. Créer votre premier bot
-Copy-Item -Path ".template" -Destination "bots/mon-bot" -Recurse
+# Créez un dossier dans ./bots/ avec votre bot
+mkdir bots/mon-bot
+cd bots/mon-bot
+npm init -y
+npm install discord.js
+# Créez votre start.js
+cd ../..
 
-# 4. Installer les dépendances
-Set-Location bots/mon-bot
-npm install
-Set-Location ../..
+# 4. Configurer dans bots.yml (voir section ci-dessous)
 
-# 5. Configurer dans bots.yml (voir section ci-dessous)
-
-# 6. Lancer le bot
+# 5. Lancer le bot
 node manager.js run mon-bot
 ```
 
-Pour un guide complet, consultez [SETUP_GITHUB.md](./SETUP_GITHUB.md)
+Pour plus de détails, consultez [ADD_BOT.md](./ADD_BOT.md)
 
 ## 📚 Créer votre premier bot
 
-### Option 1️⃣ : Utiliser la template (recommandé pour débuter)
-
-```powershell
-# 1. Dupliquer la template
-Copy-Item -Path ".template" -Destination "bots/mon-bot" -Recurse
-cd bots/mon-bot
-npm install
-cd ../..
-
-# 2. Configurer dans bots.yml (voir section Configuration)
-
-# 3. Ajouter le token dans .env
-# MON_BOT_TOKEN=YOUR_DISCORD_BOT_TOKEN_HERE
-
-# 4. Lancer
-node manager.js run mon-bot
-```
-
-### Option 2️⃣ : Votre propre structure (flexibilité totale)
-
-Vous pouvez créer votre bot **exactement comme vous le souhaitez**. Le seul requirement : avoir un `start.js` qui démarre le client Discord.
+Vous pouvez créer votre bot **exactement comme vous le souhaitez** ! Le seul requirement : avoir un `start.js` qui démarre le client Discord.
 
 **Workflow :**
-1. Développez votre bot en localhost
-2. Zippez le dossier complet
-3. Mettez-le dans `./bots/`
-4. Décompressez-le
-5. Configurez dans `bots.yml`
-6. Lancez !
+1. Créez votre structure dans `./bots/mon-bot/`
+2. Installez discord.js : `npm install discord.js`
+3. Créez un `start.js` qui démarre votre bot
+4. Configurez dans `bots.yml`
+5. Ajoutez le token dans `.env`
+6. Lancez ! : `node manager.js run mon-bot`
 
-Pour plus de détails → [📖 CUSTOM_BOT_GUIDE.md](./.template/CUSTOM_BOT_GUIDE.md)
+Pour plus de détails → [📖 ADD_BOT.md](./ADD_BOT.md)
 
 ### Configuration dans `bots.yml`
 
@@ -124,64 +104,50 @@ npm start
 
 ```
 PolyBotDocker/
-├── .env.example              # Exemple de configuration
-├── .env                       # ⚠️ Ne pas commiter
-├── bots.yml                  # Configuration centrale
-├── manager.js                # Gestionnaire de bots
-├── package.json              
+├── .env                      # Configuration (tokens Discord)
+├── .gitignore                # Fichiers ignorés par Git
+├── bots.yml                  # Configuration centrale de tous les bots
+├── manager.js                # Gestionnaire et lanceur de bots
+├── ADD_BOT.md                # Guide pour créer de nouveaux bots
+├── README.md                 # Ce fichier
 │
-├── .template/                # Template vierge pour nouveaux bots
-│   ├── start.js              # Point d'entrée
-│   ├── package.json          # Dépendances
-│   ├── config.example.json
-│   ├── commands/             # Vos commandes slash
-│   ├── events/               # Vos event listeners
-│   └── utils/                # Fonctions utilitaires
-│
-└── bots/                     # Vos bots créés
-    ├── mon-bot/              # Bot 1 (copie de .template)
-    ├── autre-bot/            # Bot 2 (copie de .template)
+└── bots/                     # Dossier contenant vos bots
+    ├── mon-bot/              # Bot 1
+    │   ├── start.js          # Point d'entrée
+    │   ├── package.json      # Dépendances
+    │   └── ...               # Votre code
+    ├── autre-bot/            # Bot 2
+    │   ├── start.js
+    │   ├── package.json
+    │   └── ...
     └── ...
 ```
 
 ## 🎓 Structure d'un bot
 
-Vous avez **la liberté totale** sur la structure ! Voici la structure recommandée (mais optionnelle) :
+Vous avez **la liberté totale** sur la structure ! La seule obligation : avoir un `start.js` qui démarre le bot.
 
+**Structure minimaliste:**
 ```
 bots/mon-bot/
 ├── start.js                  # Point d'entrée (obligatoire)
-├── package.json              # Dépendances (recommandé)
-├── config.json               # Configuration (optionnel)
-├── commands/                 # Optionnel
-├── events/                   # Optionnel
-└── utils/                    # Optionnel
+└── package.json              # Dépendances
 ```
 
-**La seule obligation :** avoir un `start.js` qui démarre le bot !
-
-### Exemples de structures
-
-**Minimaliste:**
+**Structure avancée:**
 ```
-bots/bot-simple/
-├── start.js
-└── package.json
-```
-
-**Avancée (recommandée):**
-```
-bots/bot-advanced/
+bots/mon-bot/
+├── start.js                  # Point d'entrée
+├── package.json
 ├── src/
 │   ├── client.js
 │   ├── commands/
 │   ├── events/
 │   └── utils/
-├── start.js (qui charge src/)
-└── package.json
+└── config.json               # Configuration locale
 ```
 
-Pour plus de détails → [📖 CUSTOM_BOT_GUIDE.md](./.template/CUSTOM_BOT_GUIDE.md)
+Consultez [ADD_BOT.md](./ADD_BOT.md) pour plus d'exemples.
 
 ## 🔧 Configuration avancée
 
@@ -224,8 +190,12 @@ intents:
 
 Répétez simplement le processus :
 ```powershell
-Copy-Item -Path ".template" -Destination "bots/bot2" -Recurse
-npm --prefix "bots/bot2" install
+mkdir bots/bot2
+cd bots/bot2
+npm init -y
+npm install discord.js
+# Créez votre start.js
+cd ../..
 ```
 
 Puis ajoutez à `bots.yml` :
@@ -233,6 +203,11 @@ Puis ajoutez à `bots.yml` :
   - name: bot2
     entry: start.js
     envTokenKey: BOT_2_TOKEN
+```
+
+Et lancez-le :
+```powershell
+node manager.js run bot2
 ```
 
 ## 🐳 Utiliser avec Docker
@@ -254,8 +229,8 @@ docker run -e MON_BOT_TOKEN=xxx -e AUTRE_BOT_TOKEN=yyy polybot
 ## 📞 Support
 
 Pour des questions ou problèmes :
-1. Consultez [SETUP_GITHUB.md](./SETUP_GITHUB.md)
-2. Vérifiez la template dans [.template/README.md](./.template/README.md)
+1. Consultez [ADD_BOT.md](./ADD_BOT.md) pour créer des bots
+2. Vérifiez votre `bots.yml` et `.env`
 3. Ouvrez une issue sur GitHub
 
 ## 📚 Ressources
