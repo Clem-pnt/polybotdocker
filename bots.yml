@@ -1,0 +1,20 @@
+defaultEnvironment: .env
+
+bots:
+  # Exemple : Dupliquez ce bot et remplacez 'my-bot' par votre nom
+  # Voir .template/README.md pour les instructions détaillées
+  
+  # Exemple simple (la plupart des cas)
+  # - name: my-bot
+  #   entry: start.js
+  #   envTokenKey: MY_BOT_TOKEN
+  
+  # Avec tous les paramètres optionnels
+  # - name: my-bot
+  #   entry: start.js                    # Nom du fichier ou chemin complet
+  #   envTokenKey: MY_BOT_TOKEN
+  #   usesSharedNodeModules: false       # true/false (défaut: false)
+  #   intents:                            # Optionnel
+  #     - Guilds
+  #     - GuildMessages
+  #     - MessageContent
